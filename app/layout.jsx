@@ -9,7 +9,7 @@ export const metadata = { title: 'Nguyen Van Phu — Software Developer' };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${serif.variable} ${sans.variable} ${script.variable}`}>
+    <html lang="en" suppressHydrationWarning className={`${serif.variable} ${sans.variable} ${script.variable}`}>
       <body>{children}</body>
     </html>
   );
