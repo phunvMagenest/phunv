@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 // [title, year]; images in public/works/<slug>-{400,640,1200}.webp
 const ITEMS = [
@@ -257,26 +258,28 @@ export default function Gallery({ revealed = false, driftSpeed = 0 }) {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className={isDragging ? 'gx dragging' : 'gx'}
-      style={{ '--cell': `${M}px` }}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={onPointerUp}
-      onPointerLeave={() => setTargetParallax({ x: 0, y: 0 })}
-    >
-      <div className="gx-plane">{cards}</div>
-      <div className="gx-vignette" />
+    <>
+      <div
+        ref={containerRef}
+        className={isDragging ? 'gx dragging' : 'gx'}
+        style={{ '--cell': `${M}px` }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        onPointerLeave={() => setTargetParallax({ x: 0, y: 0 })}
+      >
+        <div className="gx-plane">{cards}</div>
+        <div className="gx-vignette" />
+      </div>
 
-      {selected && (
+      {/* Portaled to <body>: the 3D ancestors (perspective) would otherwise trap it under the header */}
+      {selected && createPortal(
         <div
           className={closing ? 'gx-lightbox closing' : 'gx-lightbox'}
           role="dialog"
           aria-modal="true"
           aria-label={selected.title}
-          onPointerDown={(e) => e.stopPropagation()}
           onClick={(e) => e.target === e.currentTarget && !closing && closeLightbox()}
         >
           <button className="gx-close" onClick={() => !closing && closeLightbox()} aria-label="Close">×</button>
@@ -284,8 +287,9 @@ export default function Gallery({ revealed = false, driftSpeed = 0 }) {
             <img src={selected.src(1200)} alt={selected.title} />
             <figcaption>{selected.title} <span>({selected.year})</span></figcaption>
           </figure>
-        </div>
+        </div>,
+        document.body
       )}
-    </div>
+    </>
   );
 }
