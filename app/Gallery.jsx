@@ -1,204 +1,77 @@
 'use client';
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
-export const DEFAULT_GALLERY_ITEMS = [
-  {
-    title: 'Lunar Echo',
-    year: 2024,
-    image: { src: 'https://framerusercontent.com/images/CPEKS4CgXGFyhqj1DYQFNBo.jpg?width=1200', alt: 'Lunar Echo' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Velvet Flux',
-    year: 2023,
-    image: { src: 'https://framerusercontent.com/images/MimYtXok2QjCTmxWFzndRXnyr8w.jpg?width=1200', alt: 'Velvet Flux' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Solar Veil',
-    year: 2024,
-    image: { src: 'https://framerusercontent.com/images/rYgbOPizz9o1HjV6KKxI3wzY.jpg?width=1200', alt: 'Solar Veil' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Crystal Dawn',
-    year: 2023,
-    image: { src: 'https://framerusercontent.com/images/SiyC3lDXAGRZ2oDtZEtg8wIjcs.jpeg?width=1200', alt: 'Crystal Dawn' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Neon Mirage',
-    year: 2024,
-    image: { src: 'https://framerusercontent.com/images/Ficw83TFEYJ0FkRaYmAn5NkjQ.jpg?width=1200', alt: 'Neon Mirage' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Eternal Glow',
-    year: 2024,
-    image: { src: 'https://framerusercontent.com/images/GHdK2nXWfWZ8Z9gSr1MjIf0Icwk.jpeg?width=1200', alt: 'Eternal Glow' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Silent Orbit',
-    year: 2025,
-    image: { src: 'https://framerusercontent.com/images/9dFMIrTq5ECvBNlxbImo9om7t3Q.jpg?width=1200', alt: 'Silent Orbit' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Prism Haze',
-    year: 2023,
-    image: { src: 'https://framerusercontent.com/images/h5A2Nuz95dg2CvfcJ4v27uUY.jpeg?width=1200', alt: 'Prism Haze' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Echo Bloom',
-    year: 2024,
-    image: { src: 'https://framerusercontent.com/images/G9SwAVpOlWqpMhz1NZIOWrtVlI.jpeg?width=1200', alt: 'Echo Bloom' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Radiant Void',
-    year: 2025,
-    image: { src: 'https://framerusercontent.com/images/kQoe6d6kzaRK2zHaHCiwdjVd5aM.jpeg?width=1200', alt: 'Radiant Void' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Shadow Tide',
-    year: 2024,
-    image: { src: 'https://framerusercontent.com/images/JUswf0twst07xCdaeXlLTkI7ac.jpeg?width=1200', alt: 'Shadow Tide' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Aurora Fold',
-    year: 2024,
-    image: { src: 'https://framerusercontent.com/images/6DIZwA8nh473LG2rl7PoWoL92s.jpeg?width=1200', alt: 'Aurora Fold' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Glass Reverie',
-    year: 2024,
-    image: { src: 'https://framerusercontent.com/images/sOMytaGcY2bEliK1l0M0cfv4TZQ.jpeg?width=1200', alt: 'Glass Reverie' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Celestial Drift',
-    year: 2025,
-    image: { src: 'https://framerusercontent.com/images/cZxWT29DW5PeJgrg7iruyOyj31Q.jpg?width=1200', alt: 'Celestial Drift' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  },
-  {
-    title: 'Obsidian Flow',
-    year: 2023,
-    image: { src: 'https://framerusercontent.com/images/I9N8uUCSecWR1NyNR8pqemQHjY8.jpg?width=1200', alt: 'Obsidian Flow' },
-    hoverColor: 'rgba(110, 110, 110, 0.3)'
-  }
-];
+// [title, year, framerusercontent image id]
+const ITEMS = [
+  ['Lunar Echo', 2024, 'CPEKS4CgXGFyhqj1DYQFNBo.jpg'],
+  ['Velvet Flux', 2023, 'MimYtXok2QjCTmxWFzndRXnyr8w.jpg'],
+  ['Solar Veil', 2024, 'rYgbOPizz9o1HjV6KKxI3wzY.jpg'],
+  ['Crystal Dawn', 2023, 'SiyC3lDXAGRZ2oDtZEtg8wIjcs.jpeg'],
+  ['Neon Mirage', 2024, 'Ficw83TFEYJ0FkRaYmAn5NkjQ.jpg'],
+  ['Eternal Glow', 2024, 'GHdK2nXWfWZ8Z9gSr1MjIf0Icwk.jpeg'],
+  ['Silent Orbit', 2025, '9dFMIrTq5ECvBNlxbImo9om7t3Q.jpg'],
+  ['Prism Haze', 2023, 'h5A2Nuz95dg2CvfcJ4v27uUY.jpeg'],
+  ['Echo Bloom', 2024, 'G9SwAVpOlWqpMhz1NZIOWrtVlI.jpeg'],
+  ['Radiant Void', 2025, 'kQoe6d6kzaRK2zHaHCiwdjVd5aM.jpeg'],
+  ['Shadow Tide', 2024, 'JUswf0twst07xCdaeXlLTkI7ac.jpeg'],
+  ['Aurora Fold', 2024, '6DIZwA8nh473LG2rl7PoWoL92s.jpeg'],
+  ['Glass Reverie', 2024, 'sOMytaGcY2bEliK1l0M0cfv4TZQ.jpeg'],
+  ['Celestial Drift', 2025, 'cZxWT29DW5PeJgrg7iruyOyj31Q.jpg'],
+  ['Obsidian Flow', 2023, 'I9N8uUCSecWR1NyNR8pqemQHjY8.jpg'],
+].map(([title, year, id]) => ({ title, year, src: (w) => `https://framerusercontent.com/images/${id}?width=${w}` }));
 
-function degToRad(deg) {
-  return (deg * Math.PI) / 180;
-}
+const ARC = (48 * Math.PI / 180) * 0.9; // max yaw at the viewport edge
+const ARC_FADE = 0.9 * 0.4;
+const PARALLAX_STRENGTH = 0.1;
+const PARALLAX_EASE = 0.05;
+const FRICTION = 0.958;
+const MIN_THROW = 80;
+const MAX_THROW = 2500;
+const DRIFT_ANGLE = 35 * Math.PI / 180;
 
-function clamp(val, min, max) {
-  return Math.max(min, Math.min(max, val));
-}
+const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+const ease = (v, t, k) => { const n = v + (t - v) * k; return Math.abs(n - t) < 0.1 ? t : n; };
+// Returns prev itself once settled so React skips the re-render
+const approach = (prev, target, k) => {
+  const x = ease(prev.x, target.x, k), y = ease(prev.y, target.y, k);
+  return x === prev.x && y === prev.y ? prev : { x, y };
+};
 
-function scalePan(oldCellSize, newCellSize, anchorPoint, pan) {
-  const rx = (anchorPoint.x - pan.x) / oldCellSize;
-  const ry = (anchorPoint.y - pan.y) / oldCellSize;
-  return {
-    x: anchorPoint.x - rx * newCellSize,
-    y: anchorPoint.y - ry * newCellSize
-  };
-}
-
-function calculateArc({
-  cellCenterX,
-  cellCenterY,
-  viewportW,
-  viewportH,
-  arcAxis = 'horizontal',
-  arcMaxAngleDeg = 48,
-  arcAmount = 0.9
-}) {
-  const c = degToRad(arcMaxAngleDeg) * Math.max(0, Math.min(1, arcAmount));
-  if (c === 0) {
-    return { z: 0, yawDeg: 0, pitchDeg: 0, edgeFactor: 0 };
-  }
-
-  if (arcAxis === 'horizontal') {
-    const normX = (cellCenterX - viewportW / 2) / (viewportW / 2);
-    const angle = normX * c;
-    const sinC = Math.sin(Math.max(0.001, c));
-    const radius = viewportW / (2 * sinC);
-    const z = -radius * (Math.cos(angle) - 1);
-    const yawDeg = -(angle * 180) / Math.PI;
-    const edgeFactor = Math.min(1, Math.abs(normX));
-    return { z, yawDeg, pitchDeg: 0, edgeFactor };
-  } else {
-    const normY = (cellCenterY - viewportH / 2) / (viewportH / 2);
-    const angle = normY * c;
-    const sinC = Math.sin(Math.max(0.001, c));
-    const radius = viewportH / (2 * sinC);
-    const z = -radius * (Math.cos(angle) - 1);
-    const pitchDeg = (angle * 180) / Math.PI;
-    const edgeFactor = Math.min(1, Math.abs(normY));
-    return { z, yawDeg: 0, pitchDeg, edgeFactor };
-  }
-}
-
-export default function Gallery({
-  items = DEFAULT_GALLERY_ITEMS,
-  cellSize = 320,
-  backgroundColor = 'transparent',
-  textColor = 'rgb(128, 128, 128)',
-  cellPadding = 16,
-  gap = 26,
-  arcAmount = 0.9,
-  arcMaxAngleDeg = 48,
-  arcAxis = 'horizontal',
-  edgeFade = 0,
-  border = {
-    width: 1,
-    style: 'solid',
-    color: 'rgb(38, 38, 38)',
-    showTop: true,
-    showBottom: false,
-    showLeft: true,
-    showRight: false
-  },
-  parallaxEnabled = true,
-  parallaxStrength = 0.1,
-  parallaxEase = 0.05,
-  parallaxWhileDragging = true,
-  inertiaEnabled = true,
-  throwFriction = 0.958,
-  throwVelocityScale = 1,
-  throwMinSpeed = 80,
-  throwMaxSpeed = 2500,
-  defaultHoverColor = 'rgba(66, 66, 66, 0.18)',
-  zoomValue = 1,
-  revealed = false,
-  driftSpeed = 0,
-  driftAngleDeg = 35,
-  className = '',
-  style = {}
-}) {
+export default function Gallery({ revealed = false, driftSpeed = 0 }) {
   const containerRef = useRef(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [targetPan, setTargetPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
-  const [currentCellSize, setCurrentCellSize] = useState(cellSize);
-  const [targetCellSize, setTargetCellSize] = useState(cellSize);
-  const [parallaxOffset, setParallaxOffset] = useState({ x: 0, y: 0 });
-  const [targetParallaxOffset, setTargetParallaxOffset] = useState({ x: 0, y: 0 });
-  const [inertiaOffset, setInertiaOffset] = useState({ x: 0, y: 0 });
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [isClosingLightbox, setIsClosingLightbox] = useState(false);
+  const [parallax, setParallax] = useState({ x: 0, y: 0 });
+  const [targetParallax, setTargetParallax] = useState({ x: 0, y: 0 });
+  const [inertia, setInertia] = useState({ x: 0, y: 0 });
+  const [selected, setSelected] = useState(null);
+  const [closing, setClosing] = useState(false);
   const [viewport, setViewport] = useState({ w: 0, h: 0 });
   const [burstDone, setBurstDone] = useState(false);
   // Derived, not set in an effect: the burst class must land in the same commit as the parent's .shot,
   // or the gallery paints in its final layout for a frame before the animation starts
   const bursting = revealed && !burstDone;
+
+  // Synchronous refs for the animation loop & pointer events
+  const panRef = useRef(pan);
+  panRef.current = pan;
+  const targetPanRef = useRef(targetPan);
+  targetPanRef.current = targetPan;
+  const targetParallaxRef = useRef(targetParallax);
+  targetParallaxRef.current = targetParallax;
+  const inertiaRef = useRef(inertia);
+  inertiaRef.current = inertia;
+  const isDraggingRef = useRef(false);
+  const velocityRef = useRef({ x: 0, y: 0 });
+  const lastPointer = useRef({ x: 0, y: 0, t: 0 });
+  const isInertiaActive = useRef(false);
+  const isPointerDownRef = useRef(false);
+  const hasDraggedRef = useRef(false);
+  const dragStartPos = useRef({ x: 0, y: 0 });
+  const dragStartPan = useRef({ x: 0, y: 0 });
+  const driftOnRef = useRef(false);
+  const driftVelRef = useRef(0);
 
   // Reveal: cards burst out from screen center once; cleared after so cards mounted by panning don't replay it
   useEffect(() => {
@@ -206,400 +79,175 @@ export default function Gallery({
     const t = setTimeout(() => setBurstDone(true), 2600);
     // Burst settles at ~2.1s; hold 1.5s, then start the idle drift
     const d = setTimeout(() => {
-      driftOnRef.current = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      driftOnRef.current = !matchMedia('(prefers-reduced-motion: reduce)').matches;
     }, 3600);
     return () => { clearTimeout(t); clearTimeout(d); };
   }, [revealed]);
 
-  // Synchronous refs for smooth animation loops & events
-  const panRef = useRef(pan);
-  panRef.current = pan;
-  const targetPanRef = useRef(targetPan);
-  targetPanRef.current = targetPan;
-  const isDraggingRef = useRef(isDragging);
-  isDraggingRef.current = isDragging;
-  const parallaxOffsetRef = useRef(parallaxOffset);
-  parallaxOffsetRef.current = parallaxOffset;
-  const targetParallaxRef = useRef(targetParallaxOffset);
-  targetParallaxRef.current = targetParallaxOffset;
-  const inertiaOffsetRef = useRef(inertiaOffset);
-  inertiaOffsetRef.current = inertiaOffset;
-
-  const velocityRef = useRef({ x: 0, y: 0 });
-  const lastPointer = useRef({ x: 0, y: 0, t: 0 });
-  const isInertiaActive = useRef(false);
-  const pointerIdRef = useRef(null);
-  const isPointerDownRef = useRef(false);
-  const hasDraggedRef = useRef(false);
-  const pointerStartPos = useRef({ x: 0, y: 0 });
-  const dragStartPos = useRef({ x: 0, y: 0 });
-  const dragStartPan = useRef({ x: 0, y: 0 });
-  const zoomTimeout = useRef(null);
-  const lastFrameTimeRef = useRef(performance.now());
-  const driftOnRef = useRef(false);
-  const driftVelRef = useRef(0);
-
-  // Viewport resize tracking
   useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
     const ro = new ResizeObserver(([entry]) => {
-      const rect = entry.contentRect;
-      setViewport({ w: rect.width, h: rect.height });
+      const { width: w, height: h } = entry.contentRect;
+      setViewport({ w, h });
     });
-    ro.observe(el);
+    ro.observe(containerRef.current);
     return () => ro.disconnect();
   }, []);
 
-  // Sync cellSize when prop updates
   useEffect(() => {
-    const rect = containerRef.current?.getBoundingClientRect();
-    const anchor = rect ? { x: rect.width / 2, y: rect.height / 2 } : { x: 0, y: 0 };
-    const scaled = scalePan(currentCellSize, cellSize, anchor, {
-      x: panRef.current.x + (inertiaOffsetRef.current?.x || 0),
-      y: panRef.current.y + (inertiaOffsetRef.current?.y || 0)
-    });
-    setTargetCellSize(cellSize);
-    setTargetPan(scaled);
-  }, [cellSize]);
+    if (!selected) return;
+    const onKey = (e) => e.key === 'Escape' && closeLightbox();
+    addEventListener('keydown', onKey);
+    return () => removeEventListener('keydown', onKey);
+  }, [selected]);
 
-  const commitInertiaToPan = useCallback(() => {
-    const currentP = panRef.current;
-    const currentI = inertiaOffsetRef.current || { x: 0, y: 0 };
-    const newPan = {
-      x: currentP.x + currentI.x,
-      y: currentP.y + currentI.y
-    };
-    setPan(newPan);
-    setTargetPan(newPan);
-    setInertiaOffset({ x: 0, y: 0 });
-    isInertiaActive.current = false;
-  }, []);
-
-  // Animation frame loop for continuous physics & smoothing
+  // Animation loop: pan smoothing, idle drift, throw inertia, parallax
   useEffect(() => {
-    let rafId;
-    let lastTick = performance.now();
-
+    let rafId, lastTick = 0, last = performance.now();
     const tick = (now) => {
-      if (now - lastTick < 16) {
-        rafId = requestAnimationFrame(tick);
-        return;
-      }
+      rafId = requestAnimationFrame(tick);
+      if (now - lastTick < 16) return;
       lastTick = now;
-      const currentTime = performance.now();
-      const dt = Math.min(0.05, (currentTime - lastFrameTimeRef.current) / 1000);
-      lastFrameTimeRef.current = currentTime;
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
 
-      // Cell size zoom interpolation
-      setCurrentCellSize((prev) => {
-        const ease = isDraggingRef.current ? 0.25 : 0.15;
-        const next = prev + (targetCellSize - prev) * ease;
-        return Math.abs(next - targetCellSize) < 0.05 ? targetCellSize : next;
-      });
+      setPan((p) => approach(p, targetPanRef.current, isDraggingRef.current ? 0.5 : 0.15));
 
-      // Pan interpolation
-      setPan((prev) => {
-        const target = targetPanRef.current;
-        const ease = isDraggingRef.current ? 0.5 : 0.15;
-        const nextX = prev.x + (target.x - prev.x) * ease;
-        const nextY = prev.y + (target.y - prev.y) * ease;
-        return {
-          x: Math.abs(nextX - target.x) < 0.1 ? target.x : nextX,
-          y: Math.abs(nextY - target.y) < 0.1 ? target.y : nextY
-        };
-      });
-
-      // Idle drift along driftAngleDeg (up, left to right); eases in/out, pauses while the pointer is down
+      // Idle drift along DRIFT_ANGLE (up, left to right); eases in/out, pauses while the pointer is down
       const driftTarget = driftOnRef.current && !isPointerDownRef.current ? driftSpeed : 0;
       driftVelRef.current += (driftTarget - driftVelRef.current) * 0.02;
       if (driftVelRef.current > 0.05 && !isPointerDownRef.current) {
-        const a = degToRad(driftAngleDeg);
         const step = driftVelRef.current * dt;
-        setTargetPan((prev) => ({ x: prev.x + Math.cos(a) * step, y: prev.y - Math.sin(a) * step }));
+        setTargetPan((p) => ({ x: p.x + Math.cos(DRIFT_ANGLE) * step, y: p.y - Math.sin(DRIFT_ANGLE) * step }));
       }
 
-      // Inertia throw decay
-      if (inertiaEnabled && isInertiaActive.current) {
-        const decay = throwFriction ** (dt * 60);
-        velocityRef.current.x *= decay;
-        velocityRef.current.y *= decay;
-        if (Math.hypot(velocityRef.current.x, velocityRef.current.y) < 1) {
-          const angle = Math.atan2(velocityRef.current.y, velocityRef.current.x);
-          velocityRef.current.x = Math.cos(angle) * 1e-4;
-          velocityRef.current.y = Math.sin(angle) * 1e-4;
-        }
-        setInertiaOffset((prev) => ({
-          x: prev.x + velocityRef.current.x * dt,
-          y: prev.y + velocityRef.current.y * dt
-        }));
+      if (isInertiaActive.current) {
+        const v = velocityRef.current;
+        const decay = FRICTION ** (dt * 60);
+        v.x *= decay;
+        v.y *= decay;
+        if (Math.hypot(v.x, v.y) < 1) isInertiaActive.current = false;
+        else setInertia((p) => ({ x: p.x + v.x * dt, y: p.y + v.y * dt }));
       }
 
-      // Parallax smoothing
-      if (parallaxEnabled && (parallaxWhileDragging || !isDraggingRef.current)) {
-        setParallaxOffset((prev) => {
-          const target = targetParallaxRef.current;
-          const nextX = prev.x + (target.x - prev.x) * parallaxEase;
-          const nextY = prev.y + (target.y - prev.y) * parallaxEase;
-          return {
-            x: Math.abs(nextX - target.x) < 0.1 ? target.x : nextX,
-            y: Math.abs(nextY - target.y) < 0.1 ? target.y : nextY
-          };
-        });
-      } else {
-        setParallaxOffset((prev) => {
-          const nextX = prev.x + (0 - prev.x) * parallaxEase;
-          const nextY = prev.y + (0 - prev.y) * parallaxEase;
-          return {
-            x: Math.abs(nextX) < 0.1 ? 0 : nextX,
-            y: Math.abs(nextY) < 0.1 ? 0 : nextY
-          };
-        });
-      }
-
-      rafId = requestAnimationFrame(tick);
+      setParallax((p) => approach(p, targetParallaxRef.current, PARALLAX_EASE));
     };
-
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
-  }, [inertiaEnabled, throwFriction, targetCellSize, parallaxEnabled, parallaxWhileDragging, parallaxEase, driftSpeed, driftAngleDeg]);
+  }, [driftSpeed]);
 
-  // Pointer event handlers
-  const handlePointerDown = useCallback((e) => {
-    if (isInertiaActive.current || (inertiaOffsetRef.current?.x || 0) !== 0 || (inertiaOffsetRef.current?.y || 0) !== 0) {
-      commitInertiaToPan();
+  const onPointerDown = (e) => {
+    // Fold any leftover throw into the pan so the grid doesn't jump
+    const i = inertiaRef.current;
+    if (i.x || i.y) {
+      const p = { x: panRef.current.x + i.x, y: panRef.current.y + i.y };
+      setPan(p);
+      setTargetPan(p);
+      setInertia({ x: 0, y: 0 });
+      panRef.current = p;
     }
-    pointerIdRef.current = e.pointerId;
+    isInertiaActive.current = false;
     e.currentTarget.setPointerCapture(e.pointerId);
     isPointerDownRef.current = true;
-    setIsDragging(false);
     hasDraggedRef.current = false;
-    pointerStartPos.current = { x: e.clientX, y: e.clientY };
     lastPointer.current = { x: e.clientX, y: e.clientY, t: performance.now() };
     velocityRef.current = { x: 0, y: 0 };
     dragStartPos.current = { x: e.clientX, y: e.clientY };
-    dragStartPan.current = panRef.current;
+  };
 
-    if (zoomTimeout.current) clearTimeout(zoomTimeout.current);
-    zoomTimeout.current = setTimeout(() => {
-      if (!isDraggingRef.current && isPointerDownRef.current) {
-        const rect = containerRef.current?.getBoundingClientRect();
-        const center = rect ? { x: rect.width / 2, y: rect.height / 2 } : { x: 0, y: 0 };
-        const newSize = cellSize * zoomValue;
-        const scaledPan = scalePan(currentCellSize, newSize, center, {
-          x: panRef.current.x + (inertiaOffsetRef.current?.x || 0),
-          y: panRef.current.y + (inertiaOffsetRef.current?.y || 0)
-        });
-        setTargetCellSize(newSize);
-        setTargetPan(scaledPan);
-      }
-    }, 120);
-  }, [cellSize, zoomValue, currentCellSize, commitInertiaToPan]);
-
-  const handlePointerMove = useCallback((e) => {
-    if (isPointerDownRef.current) {
-      const now = performance.now();
-      const dt = Math.max(0.001, (now - lastPointer.current.t) / 1000);
-      const dx = e.clientX - lastPointer.current.x;
-      const dy = e.clientY - lastPointer.current.y;
-      const vx = clamp((dx / dt) * throwVelocityScale, -throwMaxSpeed, throwMaxSpeed);
-      const vy = clamp((dy / dt) * throwVelocityScale, -throwMaxSpeed, throwMaxSpeed);
-      velocityRef.current.x = vx * 0.6 + velocityRef.current.x * 0.4;
-      velocityRef.current.y = vy * 0.6 + velocityRef.current.y * 0.4;
-      lastPointer.current = { x: e.clientX, y: e.clientY, t: now };
-    }
-
-    const isInteracting = isPointerDownRef.current || isDragging;
-    if (parallaxEnabled && (parallaxWhileDragging || !isDraggingRef.current) && containerRef.current && !isInteracting) {
+  const onPointerMove = (e) => {
+    if (!isPointerDownRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      const relX = e.clientX - rect.left;
-      const relY = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      setTargetParallaxOffset({
-        x: (centerX - relX) * parallaxStrength,
-        y: (centerY - relY) * parallaxStrength
+      setTargetParallax({
+        x: (rect.width / 2 - (e.clientX - rect.left)) * PARALLAX_STRENGTH,
+        y: (rect.height / 2 - (e.clientY - rect.top)) * PARALLAX_STRENGTH,
       });
+      return;
     }
 
-    if (!isPointerDownRef.current) return;
+    const now = performance.now();
+    const dt = Math.max(0.001, (now - lastPointer.current.t) / 1000);
+    const v = velocityRef.current;
+    v.x = clamp((e.clientX - lastPointer.current.x) / dt, -MAX_THROW, MAX_THROW) * 0.6 + v.x * 0.4;
+    v.y = clamp((e.clientY - lastPointer.current.y) / dt, -MAX_THROW, MAX_THROW) * 0.6 + v.y * 0.4;
+    lastPointer.current = { x: e.clientX, y: e.clientY, t: now };
 
-    const totalDx = e.clientX - pointerStartPos.current.x;
-    const totalDy = e.clientY - pointerStartPos.current.y;
-
-    if (!isDragging && Math.hypot(totalDx, totalDy) > 8) {
+    if (!isDraggingRef.current && Math.hypot(e.clientX - dragStartPos.current.x, e.clientY - dragStartPos.current.y) > 8) {
       hasDraggedRef.current = true;
-      setIsDragging(true);
       isDraggingRef.current = true;
+      setIsDragging(true);
       dragStartPan.current = panRef.current;
       dragStartPos.current = { x: e.clientX, y: e.clientY };
     }
-
     if (isDraggingRef.current) {
-      const dragDx = e.clientX - dragStartPos.current.x;
-      const dragDy = e.clientY - dragStartPos.current.y;
       setTargetPan({
-        x: dragStartPan.current.x + dragDx,
-        y: dragStartPan.current.y + dragDy
+        x: dragStartPan.current.x + e.clientX - dragStartPos.current.x,
+        y: dragStartPan.current.y + e.clientY - dragStartPos.current.y,
       });
     }
-  }, [isDragging, parallaxEnabled, parallaxWhileDragging, parallaxStrength, throwVelocityScale, throwMaxSpeed]);
+  };
 
-  const handlePointerUp = useCallback(() => {
+  const onPointerUp = () => {
     isPointerDownRef.current = false;
-    if (zoomTimeout.current) {
-      clearTimeout(zoomTimeout.current);
-      zoomTimeout.current = null;
-    }
-    const speed = Math.hypot(velocityRef.current.x, velocityRef.current.y);
-    if (inertiaEnabled && speed >= throwMinSpeed) {
-      isInertiaActive.current = true;
-    } else {
-      isInertiaActive.current = false;
-      setInertiaOffset({ x: 0, y: 0 });
-    }
-    setIsDragging(false);
+    isInertiaActive.current = Math.hypot(velocityRef.current.x, velocityRef.current.y) >= MIN_THROW;
     isDraggingRef.current = false;
+    setIsDragging(false);
+    setTargetParallax({ x: 0, y: 0 });
+    setTimeout(() => { hasDraggedRef.current = false; }, 100);
+  };
 
-    const rect = containerRef.current?.getBoundingClientRect();
-    const center = rect ? { x: rect.width / 2, y: rect.height / 2 } : { x: 0, y: 0 };
-    const scaledPan = scalePan(currentCellSize, cellSize, center, {
-      x: panRef.current.x + (inertiaOffsetRef.current?.x || 0),
-      y: panRef.current.y + (inertiaOffsetRef.current?.y || 0)
-    });
-    setTargetParallaxOffset({ x: 0, y: 0 });
-    setTargetCellSize(cellSize);
-    setTargetPan(scaledPan);
+  const openLightbox = (item) => {
+    if (!hasDraggedRef.current) setSelected(item);
+  };
 
+  function closeLightbox() {
+    setClosing(true);
     setTimeout(() => {
-      hasDraggedRef.current = false;
-    }, 100);
-  }, [cellSize, currentCellSize, inertiaEnabled, throwMinSpeed]);
-
-  const handlePointerLeave = useCallback(() => {
-    setTargetParallaxOffset({ x: 0, y: 0 });
-  }, []);
-
-  const openLightbox = useCallback((item, e) => {
-    if (hasDraggedRef.current) return;
-    e.preventDefault();
-    e.stopPropagation();
-    setSelectedItem(item);
-  }, []);
-
-  const closeLightbox = useCallback(() => {
-    setIsClosingLightbox(true);
-    setTimeout(() => {
-      setSelectedItem(null);
-      setIsClosingLightbox(false);
+      setSelected(null);
+      setClosing(false);
     }, 300);
-  }, []);
+  }
 
-  // Compute infinite visible grid items
-  const M = currentCellSize;
-  const totalX = pan.x + parallaxOffset.x + inertiaOffset.x;
-  const totalY = pan.y + parallaxOffset.y + inertiaOffset.y;
+  // Infinite grid: only the cells covering the viewport (+ margin) are rendered
   const vw = viewport.w || 1200;
   const vh = viewport.h || 800;
-
+  const M = vw <= 640 ? 200 : 320; // cell size
+  const totalX = pan.x + parallax.x + inertia.x;
+  const totalY = pan.y + parallax.y + inertia.y;
   const minCol = Math.floor(-totalX / M) - 2;
   const maxCol = minCol + Math.ceil(vw / M) + 4;
   const minRow = Math.floor(-totalY / M) - 2;
   const maxRow = minRow + Math.ceil(vh / M) + 4;
+  const radius = vw / (2 * Math.sin(ARC));
+  const maxDist = Math.hypot(vw / 2, vh / 2);
 
   const cards = [];
   for (let r = minRow; r <= maxRow; r++) {
     for (let c = minCol; c <= maxCol; c++) {
-      const itemIndex = Math.abs((c + r * 3) % items.length);
-      const item = items[itemIndex];
-      const posX = c * M + totalX;
-      const posY = r * M + totalY;
-
-      const { z, yawDeg, pitchDeg, edgeFactor } = calculateArc({
-        cellCenterX: posX + M / 2,
-        cellCenterY: posY + M / 2,
-        viewportW: vw,
-        viewportH: vh,
-        arcAxis,
-        arcMaxAngleDeg,
-        arcAmount
-      });
-
-      const scale = 1 - edgeFactor * edgeFactor * edgeFade;
-      const dx = vw / 2 - (posX + M / 2);
-      const dy = vh / 2 - (posY + M / 2);
-      const opacity = 1 - edgeFactor * arcAmount * 0.4;
+      const item = ITEMS[Math.abs((c + r * 3) % ITEMS.length)];
+      const x = c * M + totalX;
+      const y = r * M + totalY;
+      // Bend the flat grid onto a horizontal cylinder facing the viewer
+      const norm = (x + M / 2 - vw / 2) / (vw / 2);
+      const angle = norm * ARC;
+      const z = -radius * (Math.cos(angle) - 1);
+      const dx = vw / 2 - (x + M / 2);
+      const dy = vh / 2 - (y + M / 2);
 
       cards.push(
         <div
           key={`${c}-${r}`}
-          className={bursting ? 'gx-burst' : undefined}
+          className={bursting ? 'gx-card gx-burst' : 'gx-card'}
           style={{
             '--dx': `${dx}px`,
             '--dy': `${dy}px`,
-            '--delay': `${Math.min(1, Math.hypot(dx, dy) / Math.hypot(vw / 2, vh / 2)) * 0.35}s`,
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            width: `${M}px`,
-            height: `${M}px`,
-            borderTop: border.showTop ? `${border.width}px ${border.style} ${border.color}` : 'none',
-            borderLeft: border.showLeft ? `${border.width}px ${border.style} ${border.color}` : 'none',
-            borderRight: border.showRight ? `${border.width}px ${border.style} ${border.color}` : 'none',
-            borderBottom: border.showBottom ? `${border.width}px ${border.style} ${border.color}` : 'none',
-            backgroundColor: 'transparent',
-            cursor: isDragging ? 'grabbing' : 'pointer',
-            transition: 'background-color 0.3s ease',
-            display: 'flex',
-            flexDirection: 'column',
-            padding: `${cellPadding}px`,
-            boxSizing: 'border-box',
-            transformStyle: 'preserve-3d',
-            transform: `translate3d(${posX}px, ${posY}px, ${z}px) rotateY(${yawDeg}deg) rotateX(${pitchDeg}deg) scale(${scale})`,
-            opacity,
-            willChange: isDragging ? 'transform' : 'auto',
-            backfaceVisibility: 'hidden',
-            WebkitBackfaceVisibility: 'hidden'
+            '--delay': `${Math.min(1, Math.hypot(dx, dy) / maxDist) * 0.35}s`,
+            transform: `translate3d(${x}px, ${y}px, ${z}px) rotateY(${-angle * 180 / Math.PI}deg)`,
+            opacity: 1 - Math.min(1, Math.abs(norm)) * ARC_FADE,
           }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = item.hoverColor || defaultHoverColor;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }}
-          onClick={(e) => openLightbox(item, e)}
+          onClick={() => openLightbox(item)}
         >
-          <div
-            style={{
-              flex: 1,
-              backgroundImage: `url(${item.image?.src || item.image})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              marginBottom: `${gap}px`,
-              borderRadius: '4px',
-              userSelect: 'none',
-              cursor: 'pointer'
-            }}
-          />
-          <div
-            style={{
-              color: textColor,
-              fontSize: '12px',
-              fontFamily: 'monospace',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              userSelect: 'none',
-              WebkitUserSelect: 'none',
-              pointerEvents: 'none',
-              letterSpacing: '0.04em'
-            }}
-          >
-            <span style={{ fontWeight: 'bold', textTransform: 'uppercase' }}>
-              {item.title}
-            </span>
-            <span>{item.year}</span>
-          </div>
+          <div className="gx-img" style={{ backgroundImage: `url(${item.src(M <= 200 ? 400 : 640)})` }} />
+          <div className="gx-meta"><b>{item.title}</b><span>{item.year}</span></div>
         </div>
       );
     }
@@ -608,173 +256,33 @@ export default function Gallery({
   return (
     <div
       ref={containerRef}
-      className={`gallery-container ${className}`}
-      style={{
-        width: '100%',
-        height: '100%',
-        backgroundColor,
-        position: 'relative',
-        overflow: 'hidden',
-        touchAction: 'none',
-        cursor: isDragging ? 'grabbing' : 'grab',
-        userSelect: 'none',
-        WebkitUserSelect: 'none',
-        perspective: '1000px',
-        transformStyle: 'preserve-3d',
-        willChange: isDragging ? 'transform' : 'auto',
-        ...style
-      }}
-      onPointerDown={handlePointerDown}
-      onPointerMove={handlePointerMove}
-      onPointerUp={handlePointerUp}
-      onPointerCancel={handlePointerUp}
-      onPointerLeave={handlePointerLeave}
+      className={isDragging ? 'gx dragging' : 'gx'}
+      style={{ '--cell': `${M}px` }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
+      onPointerLeave={() => setTargetParallax({ x: 0, y: 0 })}
     >
-      {/* 3D Infinite Cylinder Card Space */}
-      <div
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          transformStyle: 'preserve-3d',
-          willChange: isDragging ? 'transform' : 'auto'
-        }}
-      >
-        {cards}
-      </div>
+      <div className="gx-plane">{cards}</div>
+      <div className="gx-vignette" />
 
-      {/* Cinematic Vignette Overlay */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.85) 90%, rgba(0,0,0,1) 100%)'
-        }}
-      />
-
-      {/* Fullscreen Lightbox Modal */}
-      {selectedItem && (
+      {selected && (
         <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.95)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            zIndex: 99999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '40px',
-            cursor: 'default',
-            animation: isClosingLightbox ? 'galleryFadeOut 0.3s ease-out forwards' : 'galleryFadeIn 0.3s ease-out',
-            pointerEvents: isClosingLightbox ? 'none' : 'auto'
-          }}
-          onClick={(e) => {
-            if (e.target === e.currentTarget && !isClosingLightbox) closeLightbox();
-          }}
+          className={closing ? 'gx-lightbox closing' : 'gx-lightbox'}
+          role="dialog"
+          aria-modal="true"
+          aria-label={selected.title}
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => e.target === e.currentTarget && !closing && closeLightbox()}
         >
-          <style>{`
-            @keyframes galleryFadeIn {
-              from { opacity: 0; }
-              to { opacity: 1; }
-            }
-            @keyframes galleryFadeOut {
-              from { opacity: 1; }
-              to { opacity: 0; }
-            }
-            @keyframes galleryScaleIn {
-              from { transform: scale(0.92); opacity: 0; }
-              to { transform: scale(1); opacity: 1; }
-            }
-            @keyframes galleryScaleOut {
-              from { transform: scale(1); opacity: 1; }
-              to { transform: scale(0.95); opacity: 0; }
-            }
-          `}</style>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              if (!isClosingLightbox) closeLightbox();
-            }}
-            style={{
-              position: 'absolute',
-              top: '24px',
-              right: '24px',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.25)',
-              borderRadius: '50%',
-              width: '48px',
-              height: '48px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              color: '#FFFFFF',
-              fontSize: '26px',
-              fontWeight: '300',
-              lineHeight: 1,
-              transition: 'all 0.2s ease',
-              zIndex: 100001
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
-              e.currentTarget.style.transform = 'scale(1.1) rotate(90deg)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-              e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
-            }}
-            aria-label="Close"
-          >
-            ×
-          </button>
-
-          <div
-            style={{
-              maxWidth: '90%',
-              maxHeight: '90%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '20px',
-              animation: isClosingLightbox ? 'galleryScaleOut 0.3s ease-out forwards' : 'galleryScaleIn 0.3s ease-out'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={selectedItem.image?.src || selectedItem.image}
-              alt={selectedItem.title}
-              style={{
-                maxWidth: '100%',
-                maxHeight: 'calc(85vh - 80px)',
-                objectFit: 'contain',
-                borderRadius: '8px',
-                boxShadow: '0 25px 70px rgba(0, 0, 0, 0.6)',
-                userSelect: 'none',
-                WebkitUserSelect: 'none'
-              }}
-            />
-            <div
-              style={{
-                color: '#FFFFFF',
-                fontSize: '18px',
-                fontFamily: 'monospace',
-                textTransform: 'uppercase',
-                fontWeight: 'bold',
-                letterSpacing: '0.12em',
-                textAlign: 'center',
-                userSelect: 'none'
-              }}
-            >
-              {selectedItem.title} <span style={{ opacity: 0.5, marginLeft: '8px' }}>({selectedItem.year})</span>
-            </div>
-          </div>
+          <button className="gx-close" onClick={() => !closing && closeLightbox()} aria-label="Close">×</button>
+          <figure>
+            <img src={selected.src(1200)} alt={selected.title} />
+            <figcaption>{selected.title} <span>({selected.year})</span></figcaption>
+          </figure>
         </div>
       )}
     </div>
   );
 }
-

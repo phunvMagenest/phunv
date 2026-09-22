@@ -32,32 +32,24 @@ export default function Home() {
     };
   }, []);
 
+  const showHero = (e) => { e.preventDefault(); setFullGallery(false); };
+  const toggleWorks = (e) => { e.preventDefault(); setShot(true); setFullGallery((v) => !v); };
+
   return (
     <div className={[loaded && 'loaded', shot && 'shot', fullGallery && 'full-gallery'].filter(Boolean).join(' ') || undefined}>
       <div className="loader"><span>NGUYEN VAN PHU</span></div>
 
       <header>
-        <a href="#" className="logo reveal" style={{ '--d': '.2s' }} onClick={(e) => { e.preventDefault(); setFullGallery(false); }}>Phu.</a>
+        <a href="#" className="logo reveal" style={{ '--d': '.2s' }} onClick={showHero}>Phu.</a>
         <div className="reveal" style={{ '--d': '.3s' }}><small>Experience</small>2 Years</div>
         <div className="reveal" style={{ '--d': '.4s' }}><small>Based in</small>Ha Noi, Vietnam</div>
         <nav className="reveal" style={{ '--d': '.5s' }}>
-          <a href="#" onClick={(e) => { e.preventDefault(); setFullGallery(false); }}>About</a>
-          <a
-            href="#works"
-            onClick={(e) => { e.preventDefault(); setShot(true); setFullGallery(prev => !prev); }}
-            style={{ color: fullGallery ? 'var(--fg)' : undefined, fontWeight: fullGallery ? '600' : undefined }}
-          >
-            Works
-          </a>
+          <a href="#" onClick={showHero}>About</a>
+          <a href="#works" className={fullGallery ? 'active' : undefined} onClick={toggleWorks}>Works</a>
           <a href="#">Contact</a>
           <a href="#">Blog</a>
         </nav>
-        <a
-          href="#works"
-          className="pill reveal"
-          style={{ '--d': '.6s' }}
-          onClick={(e) => { e.preventDefault(); setShot(true); setFullGallery(prev => !prev); }}
-        >
+        <a href="#works" className="pill reveal" style={{ '--d': '.6s' }} onClick={toggleWorks}>
           {fullGallery ? 'Back to Hero' : 'Explore Works'}
         </a>
       </header>
@@ -65,7 +57,7 @@ export default function Home() {
       <section className="hero">
         <Light />
 
-        {/* GalleryX 3D Infinite Curved Drag Gallery */}
+        {/* Infinite curved drag gallery */}
         <div className="gallery-stage">
           <Gallery revealed={shot} driftSpeed={28} />
         </div>
@@ -84,12 +76,7 @@ export default function Home() {
             <span className="line"><span style={{ '--d': '.7s' }}>Software</span></span>
             <span className="line"><span style={{ '--d': '.85s' }}>Developer</span></span>
           </h1>
-          <a
-            href="#works"
-            className="pill light reveal"
-            style={{ '--d': '1s' }}
-            onClick={(e) => { e.preventDefault(); setShot(true); setFullGallery(true); }}
-          >
+          <a href="#works" className="pill light reveal" style={{ '--d': '1s' }} onClick={toggleWorks}>
             Explore Works
           </a>
         </div>
