@@ -1,24 +1,27 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
 
-// [title, year, framerusercontent image id]
+// [title, year]; images in public/works/<slug>-{400,640,1200}.webp
 const ITEMS = [
-  ['Lunar Echo', 2024, 'CPEKS4CgXGFyhqj1DYQFNBo.jpg'],
-  ['Velvet Flux', 2023, 'MimYtXok2QjCTmxWFzndRXnyr8w.jpg'],
-  ['Solar Veil', 2024, 'rYgbOPizz9o1HjV6KKxI3wzY.jpg'],
-  ['Crystal Dawn', 2023, 'SiyC3lDXAGRZ2oDtZEtg8wIjcs.jpeg'],
-  ['Neon Mirage', 2024, 'Ficw83TFEYJ0FkRaYmAn5NkjQ.jpg'],
-  ['Eternal Glow', 2024, 'GHdK2nXWfWZ8Z9gSr1MjIf0Icwk.jpeg'],
-  ['Silent Orbit', 2025, '9dFMIrTq5ECvBNlxbImo9om7t3Q.jpg'],
-  ['Prism Haze', 2023, 'h5A2Nuz95dg2CvfcJ4v27uUY.jpeg'],
-  ['Echo Bloom', 2024, 'G9SwAVpOlWqpMhz1NZIOWrtVlI.jpeg'],
-  ['Radiant Void', 2025, 'kQoe6d6kzaRK2zHaHCiwdjVd5aM.jpeg'],
-  ['Shadow Tide', 2024, 'JUswf0twst07xCdaeXlLTkI7ac.jpeg'],
-  ['Aurora Fold', 2024, '6DIZwA8nh473LG2rl7PoWoL92s.jpeg'],
-  ['Glass Reverie', 2024, 'sOMytaGcY2bEliK1l0M0cfv4TZQ.jpeg'],
-  ['Celestial Drift', 2025, 'cZxWT29DW5PeJgrg7iruyOyj31Q.jpg'],
-  ['Obsidian Flow', 2023, 'I9N8uUCSecWR1NyNR8pqemQHjY8.jpg'],
-].map(([title, year, id]) => ({ title, year, src: (w) => `https://framerusercontent.com/images/${id}?width=${w}` }));
+  ['Lunar Echo', 2024],
+  ['Velvet Flux', 2023],
+  ['Solar Veil', 2024],
+  ['Crystal Dawn', 2023],
+  ['Neon Mirage', 2024],
+  ['Eternal Glow', 2024],
+  ['Silent Orbit', 2025],
+  ['Prism Haze', 2023],
+  ['Echo Bloom', 2024],
+  ['Radiant Void', 2025],
+  ['Shadow Tide', 2024],
+  ['Aurora Fold', 2024],
+  ['Glass Reverie', 2024],
+  ['Celestial Drift', 2025],
+  ['Obsidian Flow', 2023],
+].map(([title, year]) => {
+  const slug = title.toLowerCase().replace(/\s+/g, '-');
+  return { title, year, src: (w) => `/works/${slug}-${w}.webp` };
+});
 
 const ARC = (48 * Math.PI / 180) * 0.9; // max yaw at the viewport edge
 const ARC_FADE = 0.9 * 0.4;
