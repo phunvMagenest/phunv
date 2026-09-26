@@ -107,7 +107,34 @@ export default function Gallery({ revealed = false, driftSpeed = 0 }) {
   // Animation loop: pan smoothing, idle drift, throw inertia, parallax
   useEffect(() => {
     let rafId, lastTick = 0, last = performance.now();
+    let isVisible = true;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+      if (isVisible && !rafId) {
+        last = performance.now();
+        rafId = requestAnimationFrame(tick);
+      }
+    }, { threshold: 0.01 });
+
+    if (containerRef.current) observer.observe(containerRef.current);
+
+    const onVis = () => {
+      if (document.hidden) {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = null;
+      } else if (isVisible && !rafId) {
+        last = performance.now();
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+    document.addEventListener('visibilitychange', onVis);
+
     const tick = (now) => {
+      if (!isVisible || document.hidden) {
+        rafId = null;
+        return;
+      }
       rafId = requestAnimationFrame(tick);
       if (now - lastTick < 16) return;
       lastTick = now;
@@ -136,7 +163,11 @@ export default function Gallery({ revealed = false, driftSpeed = 0 }) {
       setParallax((p) => approach(p, targetParallaxRef.current, PARALLAX_EASE));
     };
     rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', onVis);
+    };
   }, [driftSpeed]);
 
   const onPointerDown = (e) => {
